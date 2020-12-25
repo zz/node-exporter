@@ -155,3 +155,9 @@ There is a [community-supplied COPR repository](https://copr.fedorainfracloud.or
 [circleci]: https://circleci.com/gh/prometheus/node_exporter
 [quay]: https://quay.io/repository/prometheus/node-exporter
 [goreportcard]: https://goreportcard.com/report/github.com/prometheus/node_exporter
+
+
+## Build with buildx
+```
+docker buildx build  --platform=linux/arm64,linux/amd64 --push  -t zhuzhu/node-exporter:v0.15.2 -f Dockerfile .
+```
