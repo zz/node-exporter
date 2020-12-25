@@ -164,7 +164,6 @@ func NewDiskstatsCollector() (Collector, error) {
 }
 
 func (c *diskstatsCollector) Update(ch chan<- prometheus.Metric) error {
-	procDiskStats := procFilePath("diskstats")
 	diskStats, err := getDiskStats()
 	if err != nil {
 		return fmt.Errorf("couldn't get diskstats: %s", err)
@@ -176,11 +175,11 @@ func (c *diskstatsCollector) Update(ch chan<- prometheus.Metric) error {
 			continue
 		}
 
-		if len(stats) != len(c.descs) {
-			return fmt.Errorf("invalid line for %s for %s", procDiskStats, dev)
-		}
-
 		for i, value := range stats {
+			// ignore unrecognized additional stats
+			if i >= len(c.descs) {
+				break
+			}
 			v, err := strconv.ParseFloat(value, 64)
 			if err != nil {
 				return fmt.Errorf("invalid value %s in diskstats: %s", value, err)
